@@ -7,7 +7,7 @@ defmodule SamplePhxWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_sample_phx_web_key",
-    signing_salt: "QdfqDNr/"
+    signing_salt: "QbYwxthA"
   ]
 
   socket "/socket", SamplePhxWeb.UserSocket,
@@ -32,7 +32,7 @@ defmodule SamplePhxWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :sample_phx_web
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :sample_phx
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,

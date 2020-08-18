@@ -22,7 +22,7 @@ config :sample_phx_web, SamplePhxWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "5LVhmAdTvUGV38FAb6p9XI1b1E1u1OPdSKiVd0o8aLvweWeBmaeDAaFgmjKns/ps",
   render_errors: [view: SamplePhxWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: SamplePhx.PubSub,
+  pubsub_server: SamplePhxWeb.PubSub,
   live_view: [signing_salt: "F7rBBrOw"]
 
 # Configures Elixir's Logger

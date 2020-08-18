@@ -9,6 +9,8 @@ defmodule SamplePhxWeb.Application do
     children = [
       # Start the Telemetry supervisor
       SamplePhxWeb.Telemetry,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: SamplePhxWeb.PubSub},
       # Start the Endpoint (http/https)
       SamplePhxWeb.Endpoint,
       # Start a worker by calling: SamplePhxWeb.Worker.start_link(arg)
