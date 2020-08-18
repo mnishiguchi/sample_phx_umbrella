@@ -23,6 +23,7 @@ defmodule SamplePhxWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import SamplePhxWeb.ConnCase
+      import SamplePhx.TestHelpers
 
       alias SamplePhxWeb.Router.Helpers, as: Routes
 

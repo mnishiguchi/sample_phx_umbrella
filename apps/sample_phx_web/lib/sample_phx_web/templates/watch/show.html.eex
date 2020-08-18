@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md col-lg-8">
+    <h1><%= @video.title %></h1>
+    <%= content_tag :div, id: "video", data: [id: @video.id, player_id: player_id(@video)] do %>
+    <% end %>
+  </div>
+  <div class="col-md col-lg-4">
+    <h3>Annotations</h3>
+    <div id="msg-container"></div>
+    <div>
+      <textarea id="msg-input" rows="3" placeholder="Comment..." class="form-control"></textarea>
+      <button type="submit" id="msg-submit" class="btn btn-primary btn-block mt-2">Post</button>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-md col-lg-8">
+    <h3>Users</h3>
+    <ul id="user-list">
+      <%# Populated by JS %>
+    </ul>
+  </div>
+</div>

@@ -7,6 +7,7 @@ defmodule SamplePhxWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug SamplePhxWeb.Auth
   end
 
   pipeline :api do
@@ -17,6 +18,15 @@ defmodule SamplePhxWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    resources "/sessions", SessionController, only: ~w(new create delete)a
+    resources "/users", UserController, only: ~w(index show new create)a
+    get "/watch/:id", WatchController, :show
+  end
+
+  scope "/manage", SamplePhxWeb do
+    pipe_through [:browser, :authenticate_user]
+
+    resources "/videos", VideoController
   end
 
   # Other scopes may use custom stacks.

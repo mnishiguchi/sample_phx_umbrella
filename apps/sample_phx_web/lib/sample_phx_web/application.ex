@@ -10,9 +10,11 @@ defmodule SamplePhxWeb.Application do
       # Start the Telemetry supervisor
       SamplePhxWeb.Telemetry,
       # Start the Endpoint (http/https)
-      SamplePhxWeb.Endpoint
+      SamplePhxWeb.Endpoint,
       # Start a worker by calling: SamplePhxWeb.Worker.start_link(arg)
       # {SamplePhxWeb.Worker, arg}
+      # Start the Presence tracking
+      SamplePhxWeb.Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

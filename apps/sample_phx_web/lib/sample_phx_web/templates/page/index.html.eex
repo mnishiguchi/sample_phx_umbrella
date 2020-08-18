@@ -1,8 +1,7 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>Peace-of-mind from prototype to production</p>
+<section class="jumbotron">
+  <h1 class="display-4"><%= gettext "Welcome to %{name}!", name: "Sample Phx" %></h1>
+  <p class="lead">Peace-of-mind from prototype to production</p>
 </section>
-
 <section class="row">
   <article class="column">
     <h2>Resources</h2>

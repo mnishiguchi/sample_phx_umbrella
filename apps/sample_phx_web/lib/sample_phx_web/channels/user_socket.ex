@@ -2,7 +2,10 @@ defmodule SamplePhxWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", SamplePhxWeb.RoomChannel
+  channel "videos:*", SamplePhxWeb.VideoChannel
+
+  # max_age: 1209600 is equivalent to two weeks in seconds
+  @max_age 2 * 7 * 24 * 60 * 60
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -16,8 +19,22 @@ defmodule SamplePhxWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @impl true
-  def connect(_params, socket, _connect_info) do
-    {:ok, socket}
+  def connect(%{"token" => token}, socket, _connect_info) do
+    # Verify the user token provided by the client. Tokens are only valid for a certain period of
+    # time.
+    case Phoenix.Token.verify(socket, "user socket", token, max_age: @max_age) do
+      # If the token is valid, we receive the `user_id` and establish the connection.
+      {:ok, user_id} ->
+        {:ok, assign(socket, :user_id, user_id)}
+
+      # If the token is invalid, we deny the connection attempt by the client.
+      {:error, _reason} ->
+        :error
+    end
+  end
+
+  def connect(_params, _socket, _connect_info) do
+    :error
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
@@ -31,5 +48,7 @@ defmodule SamplePhxWeb.UserSocket do
   #
   # Returning `nil` makes this socket anonymous.
   @impl true
-  def id(_socket), do: nil
+  def id(socket) do
+    "user_socket:#{socket.assigns.user_id}"
+  end
 end
