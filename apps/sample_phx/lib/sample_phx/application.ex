@@ -9,12 +9,10 @@ defmodule SamplePhx.Application do
     children = [
       # Start the Ecto repository
       SamplePhx.Repo,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: SamplePhx.PubSub}
-      # Start a worker by calling: SamplePhx.Worker.start_link(arg)
-      # {SamplePhx.Worker, arg}
     ]
 
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
     Supervisor.start_link(children, strategy: :one_for_one, name: SamplePhx.Supervisor)
   end
 end

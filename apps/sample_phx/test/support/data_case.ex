@@ -24,6 +24,7 @@ defmodule SamplePhx.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import SamplePhx.DataCase
+      import SamplePhx.TestHelpers
     end
   end
 
