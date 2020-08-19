@@ -7,8 +7,12 @@ defmodule InfoSys.Application do
 
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: InfoSys.Worker.start_link(arg)
-      # {InfoSys.Worker, arg}
+      InfoSys.Cache,
+      # We always want to start processes inside sipervision trees for cleanup
+      # and discoverability. Each process we start should obey its explicit
+      # start and shutdown rules, so we'll clean up effectively and be able to
+      # view those supervised processes through tools like Observer.
+      {Task.Supervisor, name: InfoSys.TaskSupervisor}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

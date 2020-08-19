@@ -39,7 +39,16 @@ defmodule InfoSys.Counter do
   end
 
   def init(initial_state) do
+    Process.send_after(self(), :tick, 1000)
     {:ok, initial_state}
+  end
+
+  def handle_info(:tick, state) when state <= 0, do: raise("Boom!")
+
+  def handle_info(:tick, state) do
+    IO.puts("tick #{state}")
+    Process.send_after(self(), :tick, 1000)
+    {:noreply, state - 1}
   end
 
   def handle_cast(:inc, state) do
