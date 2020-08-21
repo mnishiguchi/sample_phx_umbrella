@@ -32,9 +32,28 @@ defmodule InfoSys.Cache do
     GenServer.start_link(__MODULE__, opts, name: opts[:name])
   end
 
+  # A millisecond value for clearing the cache.
+  @default_clear_interval :timer.seconds(60)
+
   def init(opts) do
-    new_table(opts[:name])
-    {:ok, %{}}
+    initial_state = %{
+      interval: opts[:clear_interval] || @default_clear_interval,
+      timer: nil,
+      table: new_table(opts[:name])
+    }
+
+    {:ok, schedule_clear(initial_state)}
+  end
+
+  # Clears cache and schedules for next.
+  def handle_info(:clear, state) do
+    :ets.delete_all_objects(state.table)
+    {:noreply, schedule_clear(state)}
+  end
+
+  # Schedule to send :clear message in the future.
+  defp schedule_clear(state) do
+    %{state | timer: Process.send_after(self(), :clear, state.interval)}
   end
 
   def new_table(name) do
