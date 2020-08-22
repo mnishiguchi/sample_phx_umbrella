@@ -2,7 +2,7 @@ defmodule InfoSys.Cache do
   use GenServer
 
   @moduledoc """
-  EXAMPLES
+  ## Examples
 
       iex> alias InfoSys.Cache
       InfoSys.Cache
@@ -15,11 +15,38 @@ defmodule InfoSys.Cache do
 
   """
 
+  @doc """
+  ## Examples
+
+      # Cache key can be a complex data type.
+      iex> cache_key = {"wolfram", "What is elixir?", 10}
+      iex> value = {:ok,
+                    %InfoSys.Result{
+                      backend: InfoSys.Wolfram,
+                      score: 95,
+                      text: "1 | noun | a sweet flavored liquid" }}
+      iex> Cache.put(cache_key, value)
+      :ok
+
+  """
   def put(name \\ __MODULE__, key, value) do
     true = :ets.insert(table_name(name), {key, value})
     :ok
   end
 
+  @doc """
+  ## Examples
+
+      # Cache key can be a complex data type.
+      iex> cache_key = {"wolfram", "What is elixir?", 10}
+      iex> Cache.fetch(cache_key)
+      {:ok,
+        %InfoSys.Result{
+          backend: InfoSys.Wolfram,
+          score: 95,
+          text: "1 | noun | a sweet flavored liquid" }}
+
+  """
   def fetch(name \\ __MODULE__, key) do
     {:ok, :ets.lookup_element(table_name(name), key, 2)}
   rescue
@@ -68,7 +95,8 @@ defmodule InfoSys.Cache do
     ])
   end
 
-  # An atom of the table name to used for our ETS table.
+  # An atom of the table name to used for our ETS table. When `InfoSys.Cache`
+  # (default) is specified, it will return `InfoSys.Cache_cache`.
   defp table_name(name) do
     :"#{name}_cache"
   end

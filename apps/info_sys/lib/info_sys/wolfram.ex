@@ -5,14 +5,11 @@ defmodule InfoSys.Wolfram do
   ## Examples
 
     iex> Wolfram.compute("What is elixir?", nil)
-
-    [
-      %InfoSys.Result{
+    [%InfoSys.Result{
         backend: InfoSys.Wolfram,
         score: 95,
-        text: "1 | noun | a sweet flavored liquid"
-      }
-    ]
+        text: "1 | noun | a sweet flavored liquid" }]
+
   """
 
   import SweetXml
