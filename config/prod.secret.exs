@@ -39,3 +39,13 @@ config :sample_phx_web, SamplePhxWeb.Endpoint,
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
+
+# ## WolframAlpha API
+#
+# Visit the WolframAlpha developer portal, sign up for a new account, and follow
+# the instructions to get an app id. https://www.wolframalpha.com/
+#
+wolfram_app_id = System.get_env("WOLFRAM_APP_ID") || raise """
+Environment variable WOLFRAM_APP_ID is missing.
+"""
+config :info_sys, :wolfram, app_id: wolfram_app_id

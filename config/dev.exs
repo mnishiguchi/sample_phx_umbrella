@@ -74,3 +74,13 @@ config :phoenix, :plug_init_mode, :runtime
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
+
+# ## WolframAlpha API
+#
+# Visit the WolframAlpha developer portal, sign up for a new account, and follow
+# the instructions to get an app id. https://www.wolframalpha.com/
+#
+wolfram_app_id = System.get_env("WOLFRAM_APP_ID") || raise """
+Environment variable WOLFRAM_APP_ID is missing.
+"""
+config :info_sys, :wolfram, app_id: wolfram_app_id

@@ -20,11 +20,24 @@ defmodule InfoSys do
   Performs the query for each available backend service.
   """
   def compute(query, opts \\ []) do
+    timeout = opts[:timeout] || 10_000
     opts = Keyword.put_new(opts, :limit, 10)
     backends = opts[:backends] || @default_backends
 
     backends
     |> Enum.map(&async_query(&1, query, opts))
+    # Wait on all tasks.
+    |> Task.yield_many(timeout)
+    |> Enum.map(fn
+      # Shutdown immediately if response is nil.
+      {task, response} -> response || Task.shutdown(task, :brutal_kill)
+    end)
+    |> Enum.flat_map(fn
+      {:ok, results} -> results
+      _ -> []
+    end)
+    |> Enum.sort(&(&1.score >= &2.score))
+    |> Enum.take(opts[:limit])
   end
 
   # Spawns off a task in a new process. Returns a Task struct.

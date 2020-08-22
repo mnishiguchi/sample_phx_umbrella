@@ -1,6 +1,6 @@
 File.exists?(Path.expand("~/.iex.exs")) && import_file("~/.iex.exs")
 
-alias InfoSys.Cache
+alias InfoSys.{Cache, Wolfram}
 alias SamplePhx.{Accounts, Multimedia, Repo}
 alias SamplePhx.Accounts.User
 alias SamplePhx.Multimedia.{Annotation, Category, Permalink, Video}
