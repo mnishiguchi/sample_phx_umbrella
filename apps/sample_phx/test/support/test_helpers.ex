@@ -2,6 +2,9 @@ defmodule SamplePhx.TestHelpers do
   alias SamplePhx.{Accounts, Multimedia}
   alias Accounts.User
 
+  @doc """
+  A fixture for a registered end user.
+  """
   def user_fixture(attrs \\ %{}) do
     default_user_attrs = %{
       name: "Some User",
@@ -17,6 +20,9 @@ defmodule SamplePhx.TestHelpers do
     user
   end
 
+  @doc """
+  A fixture for a video of the specified user.
+  """
   def video_fixture(%User{} = user, attrs \\ %{}) do
     default_video_attrs = %{
       title: "A Title",

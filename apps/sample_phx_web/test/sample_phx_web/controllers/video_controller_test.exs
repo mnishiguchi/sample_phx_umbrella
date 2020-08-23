@@ -3,20 +3,17 @@ defmodule SamplePhxWeb.VideoControllerTest do
 
   alias SamplePhx.Multimedia
 
-  setup args do
-    cond do
-      args[:login_as] ->
-        user = user_fixture(username: args[:login_as])
-        conn = assign(args[:conn], :current_user, user)
+  # By default, use is not logged in.
+  @moduletag login_as: nil
 
-        {:ok, conn: conn, user: user}
+  setup(context) do
+    %{login_as: login_as, conn: conn} = context
+    user = if login_as, do: user_fixture(username: login_as), else: nil
+    conn = assign(conn, :current_user, user)
 
-      true ->
-        {:ok, conn: args[:conn]}
-    end
+    {:ok, %{conn: conn, user: user}}
   end
 
-  @tag login_as: nil
   test "requires user authentication on all actions", %{conn: conn} do
     Enum.each(
       [
@@ -36,7 +33,7 @@ defmodule SamplePhxWeb.VideoControllerTest do
   end
 
   @tag login_as: "sneaky"
-  test "authorizes actions against access by other users", %{conn: conn, user: _} do
+  test "authorizes actions against access by other users", %{conn: conn} do
     video = video_fixture(user_fixture(username: "owner"))
 
     assert_error_sent :not_found, fn ->
@@ -126,7 +123,8 @@ defmodule SamplePhxWeb.VideoControllerTest do
     test "redirects when data is valid", %{conn: conn, user: user} do
       video = video_fixture(user)
 
-      conn_after_update = put(conn, Routes.video_path(conn, :update, video), video: %{title: "Updated Title"})
+      conn_after_update =
+        put(conn, Routes.video_path(conn, :update, video), video: %{title: "Updated Title"})
 
       updated_video_path = "/manage/videos/#{video.id}-updated-title"
       assert redirected_to(conn_after_update) == updated_video_path
