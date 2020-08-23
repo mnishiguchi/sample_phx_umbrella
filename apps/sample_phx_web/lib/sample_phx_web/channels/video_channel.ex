@@ -42,14 +42,10 @@ defmodule SamplePhxWeb.VideoChannel do
   def handle_in("new_annotation", params, user, socket) do
     case Multimedia.annotate_video(user, socket.assigns.video_id, params) do
       {:ok, annotation} ->
-        # The payload is delivered to all clients on this topic. Be sure to
-        # control the payload as closely as possible.
-        broadcast!(socket, "new_annotation", %{
-          id: annotation.id,
-          user: SamplePhxWeb.UserView.render("user.json", %{user: user}),
-          body: annotation.body,
-          at: annotation.at
-        })
+        broadcast_annotation(socket, user, annotation)
+
+        # We do not care about the task result not if it fails.
+        Task.start(fn -> compute_additional_info(annotation, socket) end)
 
         # We could have decided not to send a reply with `{:noreply, socket}`,
         # but it is common practice to acknowledge the result of the pushed
@@ -59,6 +55,33 @@ defmodule SamplePhxWeb.VideoChannel do
 
       {:error, changeset} ->
         {:reply, {:error, %{errors: changeset}}, socket}
+    end
+  end
+
+  # Broadcasts the annotation to all the subscribers on the topic.
+  defp broadcast_annotation(socket, user, annotation) do
+    # Be sure to ontrol the payload as closely as possible.
+    broadcast!(socket, "new_annotation", %{
+      id: annotation.id,
+      user: SamplePhxWeb.UserView.render("user.json", %{user: user}),
+      body: annotation.body,
+      at: annotation.at
+    })
+  end
+
+  defp compute_additional_info(annotation, socket) do
+    for result <- InfoSys.compute(annotation.body, limit: 1, timeout: 10_000) do
+      # An internal user that represents a backend service.
+      backend_user = Accounts.get_user_by(username: result.backend.name())
+      attrs = %{body: result.text, at: annotation.at}
+
+      case Multimedia.annotate_video(backend_user, annotation.video_id, attrs) do
+        {:ok, info_annotation} ->
+          broadcast_annotation(socket, backend_user, info_annotation)
+
+        {:error, _changeset} ->
+          :ignore
+      end
     end
   end
 

@@ -8,7 +8,7 @@ defmodule InfoSys do
   # A list of supported backend services.
   @default_backends [InfoSys.Wolfram]
 
-  # A data container for a serch result.
+  # A data container for a search result.
   defmodule Result do
     defstruct score: 0,
               text: nil,

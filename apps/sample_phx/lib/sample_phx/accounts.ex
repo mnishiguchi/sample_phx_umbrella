@@ -55,11 +55,12 @@ defmodule SamplePhx.Accounts do
   end
 
   @doc """
-  Creates a user.
+  Creates an internal user. For registering an end user, use `register_user/1`
+  instead.
 
   ## Examples
 
-      iex> create_user(%{field: value})
+      iex> create_user(%{name: "Wolfram", username: "wolfram"})
       {:ok, %User{}}
 
       iex> create_user(%{field: bad_value})
@@ -123,6 +124,9 @@ defmodule SamplePhx.Accounts do
     User.registration_changeset(user, attrs)
   end
 
+  @doc """
+  Registers an end user.
+  """
   def register_user(attrs \\ %{}) do
     %User{}
     |> User.registration_changeset(attrs)
