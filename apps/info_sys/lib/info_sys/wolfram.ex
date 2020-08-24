@@ -44,9 +44,12 @@ defmodule InfoSys.Wolfram do
   end
 
   # Accepts a query as a string and fetches answers to the query.
+  # The HTTP client is pluggable through our mix configuration so that we can
+  # use a stub for our tests.
+  @http_client Application.get_env(:info_sys, :wolfram)[:http_client] || :httpc
   defp fetch_xml(query) do
     url_charlist = String.to_charlist(build_url_with_query(query))
-    {:ok, {_, _, body}} = :httpc.request(url_charlist)
+    {:ok, {_, _, body}} = @http_client.request(url_charlist)
     body
   end
 

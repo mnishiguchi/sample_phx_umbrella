@@ -24,5 +24,7 @@ config :logger, level: :warn
 # Ease up the number of hashing rounds to speed up test suite.
 config :pbkdf2_elixir, :rounds, 1
 
-# A placeholder for WolframAlpha API app id.
-config :info_sys, :wolfram, app_id: "xxxxxx"
+# WolframAlpha API
+config :info_sys, :wolfram,
+  app_id: "xxxxxx",
+  http_client: InfoSys.Test.HTTPClient
